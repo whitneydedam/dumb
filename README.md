@@ -1,25 +1,27 @@
-# Using secrets
+# GitHub Action to Create Releases Based on a Keyword
+The Keyword Releaser will create a release based on the keyword specified in the arguments.
 
-Using secrets.
+# Secrets
+- `GITHUB_TOKEN` - _Required_ Allows the Action to authenticte with the GitHub API to create the release.
 
-_NOTE: THIS WORKFLOW IS FOR DEMONSTRATION PURPOSES. When the workflow is loaded initially, you will see an `Invalid Workflow` error. This is because the example action, "Github Action for AWS" requires additional configuration to run successfully._
+# Environment Variables
+- N/A
 
-You can safely ignore this error.
+# Arguments
+- _Required_ - A single keyword.  If the keyword is found in a commit message, a release will be created.  Although case is ignored, it's suggested to use a unique, uppercase string like `FIXED`, `READY_TO_RELEASE`, or maybe even `PINEAPPLE`.
+
+# Examples
+Here's an example workflow that uses the Keyword Releaser action.  The workflow is triggered by a `PUSH` event and looks for the keyword `"FIXED"`.
 
 ```
-workflow "New workflow" {
+workflow "keyword-monitor" {
   on = "push"
-  resolves = ["GitHub Action for AWS"]
+  resolves = [ "keyword-releaser" ]
 }
 
-action "GitHub Action for AWS" {
-  uses = "actions/aws/cli@efb074ae4510f2d12c7801e4461b65bf5e8317e6"
-  args = "ec2 describe-instances"
-  env = {
-    AWS_DEFAULT_REGION = "us-west-2"
-    AWS_DEFAULT_OUTPUT = "json"
-  }
-  secrets = ["AWS_SECRET_ACCESS_KEY", "AWS_ACCESS_KEY_ID"]
+action "keyword-releaser" {
+  uses = "ADD_YOUR_GITHUB_USER_NAME_HERE/keyword-releaser@master"
+  secrets = ["GITHUB_TOKEN"]
+  args = "FIXED"
 }
 ```
-
