@@ -1,26 +1,34 @@
-# Use Case: Continuous Integration
-Demonstrating continuous integration with GitHub Actions
-
-Files include:
-
-- Python web app and requirements.txt
-- Dockerfile for creating a container for the app
-- Workflow for calling Actions on push
-- Local action for linting and testing
+# Use Case: Pull Requests
+Exploring a use case for Pull Requests with GitHub Actions.
 
 ```
-workflow "Continuous Integration" {
-  on = "push"
-  resolves = ["GitHub Action for Docker"]
+workflow "Pull Request Manager" {
+  resolves = ["Auto Merge"]
+  on = "pull_request"
 }
 
-action "Check" {
-  uses = "./.github/action-check"
+action "Filter Actor" {
+  uses = "actions/bin/filter@3c98a2679187369a2116d4f311568596d3725740"
+  args = ["actor", "managedkaos", "octocat"]
 }
 
-action "GitHub Action for Docker" {
-  uses = "actions/docker/cli@8cdf801b322af5f369e00d85e9cf3a7122f49108"
-  needs = ["Check"]
-  args = "build ."
+action "Run Pylint" {
+  uses = "cclauss/GitHub-Action-for-pylint@master"
+  args = "pip install -r requirements.txt ; pylint app.py"
+}
+
+action "Auto Approve" {
+  needs = [
+      "Filter Actor",
+      "Run Pylint"
+  ]
+  uses = "hmarr/auto-approve-action@master"
+  secrets = ["GITHUB_TOKEN"]
+}
+
+action "Auto Merge" {
+  uses = "./.github/merge-pull-request"
+  needs = ["Auto Approve"]
+  secrets = ["GITHUB_TOKEN"]
 }
 ```
