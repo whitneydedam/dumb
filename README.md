@@ -1,21 +1,13 @@
-# Test keyword releaser
-Testing the keyword releaser action.
+# Publish an Action to the Marketplace
 
-Commit to this repo with a message that includes the keyword `FIXED`.
+Review these documents in preparation for publishing your action to the GitHub Marketplace:
 
-Then check the `Releases` page for this repo to see the release created by the action.
+## Two-factor Authentication (2FA)
+- [Accessing GitHub using two-factor authentication](https://help.github.com/en/articles/about-two-factor-authentication)
+- [Configuring two-factor authentication](https://help.github.com/en/articles/configuring-two-factor-authentication)
 
-_If you created your own custom action and would prefer to use that one, update the workflow to call the action from the location where your custom action is stored._
+## GitHub Marketplace Developer Agreement
+- [GitHub Marketplace Developer Agreement](https://help.github.com/en/articles/github-marketplace-developer-agreement)
 
-```
-workflow "keyword-monitor" {
-  on = "push"
-  resolves = [ "keyword-releaser" ]
-}
-
-action "keyword-releaser" {
-  uses = "./.github/keyword-releaser"
-  secrets = ["GITHUB_TOKEN"]
-  args = "FIXED"
-}
-```
+## Publishing an action in the GitHub Marketplace
+- [Publishing an action in the GitHub Marketplace](https://developer.github.com/marketplace/actions/publishing-an-action-in-the-github-marketplace/)
