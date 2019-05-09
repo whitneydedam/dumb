@@ -1,8 +1,8 @@
-# Using environment variables
+# Using secrets
 
-Using environment variables.
+Using secrets.
 
-_NOTE: THIS WORKFLOW IS FOR DEMONSTRATION PURPOSES.  When the workflow is loaded initially, the workflow will complete with a `Failure` status.  This is because the example action, "Github Action for AWS" requires additional configuration to run successfully._
+_NOTE: THIS WORKFLOW IS FOR DEMONSTRATION PURPOSES. When the workflow is loaded initially, you will see an `Invalid Workflow` error. This is because the example action, "Github Action for AWS" requires additional configuration to run successfully._
 
 You can safely ignore this error.
 
@@ -19,5 +19,7 @@ action "GitHub Action for AWS" {
     AWS_DEFAULT_REGION = "us-west-2"
     AWS_DEFAULT_OUTPUT = "json"
   }
+  secrets = ["AWS_SECRET_ACCESS_KEY", "AWS_ACCESS_KEY_ID"]
 }
 ```
+

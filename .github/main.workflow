@@ -10,4 +10,5 @@ action "GitHub Action for AWS" {
     AWS_DEFAULT_REGION = "us-west-2"
     AWS_DEFAULT_OUTPUT = "json"
   }
+  secrets = ["AWS_SECRET_ACCESS_KEY", "AWS_ACCESS_KEY_ID"]
 }
