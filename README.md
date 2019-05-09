@@ -1,13 +1,26 @@
-# Publish an Action to the Marketplace
+# Use Case: Continuous Integration
+Demonstrating continuous integration with GitHub Actions
 
-Review these documents in preparation for publishing your action to the GitHub Marketplace:
+Files include:
 
-## Two-factor Authentication (2FA)
-- [Accessing GitHub using two-factor authentication](https://help.github.com/en/articles/about-two-factor-authentication)
-- [Configuring two-factor authentication](https://help.github.com/en/articles/configuring-two-factor-authentication)
+- Python web app and requirements.txt
+- Dockerfile for creating a container for the app
+- Workflow for calling Actions on push
+- Local action for linting and testing
 
-## GitHub Marketplace Developer Agreement
-- [GitHub Marketplace Developer Agreement](https://help.github.com/en/articles/github-marketplace-developer-agreement)
+```
+workflow "Continuous Integration" {
+  on = "push"
+  resolves = ["GitHub Action for Docker"]
+}
 
-## Publishing an action in the GitHub Marketplace
-- [Publishing an action in the GitHub Marketplace](https://developer.github.com/marketplace/actions/publishing-an-action-in-the-github-marketplace/)
+action "Check" {
+  uses = "./.github/action-check"
+}
+
+action "GitHub Action for Docker" {
+  uses = "actions/docker/cli@8cdf801b322af5f369e00d85e9cf3a7122f49108"
+  needs = ["Check"]
+  args = "build ."
+}
+```

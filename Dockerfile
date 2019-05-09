@@ -1,19 +1,25 @@
-FROM alpine
+# use a python image
+FROM python:3.6
 
-LABEL "com.github.actions.name"="Keyword Releaser"
-LABEL "com.github.actions.description"="Creates a release based on a keyword"
-LABEL "com.github.actions.icon"="gift"
-LABEL "com.github.actions.color"="blue"
+# set the working directory in the container to /app
+WORKDIR /app
 
-RUN apk add --no-cache \
-        bash \
-        httpie \
-        jq && \
-        which bash && \
-        which http && \
-        which jq
+# add the current directory to the container as /app
+COPY . /app
 
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-COPY sample_push_event.json /sample_push_event.json
+# pip install flask
+RUN pip install --upgrade pip && \
+    pip install \
+        Flask \
+        awscli \
+        flake8 \
+        pylint \
+        pytest \
+        pytest-flask
 
-ENTRYPOINT ["entrypoint.sh"]
+# expose the default flask port
+EXPOSE 5000
+
+# execute the Flask app
+ENTRYPOINT ["python"]
+CMD ["/app/app.py"]
