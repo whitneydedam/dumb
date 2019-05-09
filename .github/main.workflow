@@ -1,29 +1,42 @@
-workflow "Pull Request Manager" {
-  resolves = ["Auto Merge"]
-  on = "pull_request"
-}
-
-action "Filter Actor" {
-  uses = "actions/bin/filter@3c98a2679187369a2116d4f311568596d3725740"
-  args = ["actor", "managedkaos", "octocat"]
-}
-
-action "Run Pylint" {
-  uses = "cclauss/GitHub-Action-for-pylint@master"
-  args = "pip install -r requirements.txt ; pylint app.py"
-}
-
-action "Auto Approve" {
-  needs = [
-      "Filter Actor",
-      "Run Pylint"
+workflow "Pipeline" {
+  on = "push"
+  resolves = [
+    "Test Production",
   ]
-  uses = "hmarr/auto-approve-action@master"
-  secrets = ["GITHUB_TOKEN"]
 }
 
-action "Auto Merge" {
-  uses = "managedkaos/merge-pull-request@master"
-  needs = ["Auto Approve"]
-  secrets = ["GITHUB_TOKEN"]
+action "Filter Branch" {
+  uses = "actions/bin/filter@3c98a2679187369a2116d4f311568596d3725740"
+  args = "branch master"
+}
+
+action "Check" {
+  uses = "./.github/action-check"
+}
+
+action "Build" {
+  needs = ["Check", "Filter Branch"]
+  uses = "./.github/action-build"
+  secrets = [
+    "AWS_ACCESS_KEY_ID",
+    "AWS_SECRET_ACCESS_KEY",
+    "AWS_DEFAULT_REGION",
+  ]
+}
+
+action "Deploy Production" {
+  needs = "Build"
+  uses = "./.github/action-deploy"
+  args = "production"
+  secrets = [
+    "AWS_ACCESS_KEY_ID",
+    "AWS_SECRET_ACCESS_KEY",
+    "AWS_DEFAULT_REGION",
+  ]
+}
+
+action "Test Production" {
+  needs = "Deploy Production"
+  uses = "./.github/action-test"
+  args = "production"
 }

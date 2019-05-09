@@ -9,13 +9,7 @@ COPY . /app
 
 # pip install flask
 RUN pip install --upgrade pip && \
-    pip install \
-        Flask \
-        awscli \
-        flake8 \
-        pylint \
-        pytest \
-        pytest-flask
+    pip install -r /app/requirements.txt
 
 # expose the default flask port
 EXPOSE 5000
