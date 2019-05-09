@@ -1,8 +1,13 @@
 workflow "New workflow" {
-  resolves = ["Python Syntax Checker"]
   on = "push"
+  resolves = ["GitHub Action for AWS"]
 }
 
-action "Python Syntax Checker" {
-  uses = "cclauss/Find-Python-syntax-errors-action@0.1.2"
+action "GitHub Action for AWS" {
+  uses = "actions/aws/cli@efb074ae4510f2d12c7801e4461b65bf5e8317e6"
+  args = "ec2 describe-instances"
+  env = {
+    AWS_DEFAULT_REGION = "us-west-2"
+    AWS_DEFAULT_OUTPUT = "json"
+  }
 }
