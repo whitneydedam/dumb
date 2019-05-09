@@ -1,17 +1,11 @@
-# GitHub Action to Create Releases Based on a Keyword
-The Keyword Releaser will create a release based on the keyword specified in the arguments.
+# Test keyword releaser
+Testing the keyword releaser action.
 
-# Secrets
-- `GITHUB_TOKEN` - _Required_ Allows the Action to authenticte with the GitHub API to create the release.
+Commit to this repo with a message that includes the keyword `FIXED`.
 
-# Environment Variables
-- N/A
+Then check the `Releases` page for this repo to see the release created by the action.
 
-# Arguments
-- _Required_ - A single keyword.  If the keyword is found in a commit message, a release will be created.  Although case is ignored, it's suggested to use a unique, uppercase string like `FIXED`, `READY_TO_RELEASE`, or maybe even `PINEAPPLE`.
-
-# Examples
-Here's an example workflow that uses the Keyword Releaser action.  The workflow is triggered by a `PUSH` event and looks for the keyword `"FIXED"`.
+_If you created your own custom action and would prefer to use that one, update the workflow to call the action from the location where your custom action is stored._
 
 ```
 workflow "keyword-monitor" {
@@ -20,7 +14,7 @@ workflow "keyword-monitor" {
 }
 
 action "keyword-releaser" {
-  uses = "ADD_YOUR_GITHUB_USER_NAME_HERE/keyword-releaser@master"
+  uses = "./.github/keyword-releaser"
   secrets = ["GITHUB_TOKEN"]
   args = "FIXED"
 }
